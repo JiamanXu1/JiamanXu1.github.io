@@ -1,0 +1,18 @@
+---
+layout: archive
+title: "学术报告"
+permalink: /talks/
+author_profile: true
+---
+
+<p>学术报告信息正在整理中。新增报告时，请在 <code>_talks/</code> 目录中新建 Markdown 文件；具体步骤见<a href="/update-guide/">网站更新指南</a>。</p>
+
+{% if site.talkmap_link == true %}
+
+<p style="text-decoration:underline;"><a href="/talkmap.html">See a map of all the places I've given a talk!</a></p>
+
+{% endif %}
+
+{% for post in site.talks reversed %}
+  {% include archive-single-talk.html %}
+{% endfor %}

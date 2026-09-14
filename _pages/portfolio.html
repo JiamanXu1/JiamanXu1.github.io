@@ -1,0 +1,15 @@
+---
+layout: archive
+title: "项目"
+permalink: /portfolio/
+author_profile: true
+---
+
+<p>代表项目正在整理中。新增项目时，请在 <code>_portfolio/</code> 目录中新建 Markdown 文件；具体步骤见<a href="/update-guide/">网站更新指南</a>。</p>
+
+{% include base_path %}
+
+
+{% for post in site.portfolio %}
+  {% include archive-single.html %}
+{% endfor %}
