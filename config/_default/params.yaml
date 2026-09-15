@@ -1,0 +1,43 @@
+hugoblox:
+  schema: "2.0"
+  identity:
+    name: Jiaman Xu
+    type: person
+    tagline: 请在作者资料中填写你的学术身份
+    description: Jiaman Xu 的个人学术主页
+  theme:
+    mode: system
+    pack: default
+    colors:
+      primary: teal
+      secondary: cyan
+      neutral: slate
+  typography:
+    font: sans
+    size: md
+  layout:
+    radius: lg
+    spacing: comfortable
+    avatar_shape: circle
+  header:
+    enable: true
+    style: navbar
+    sticky: true
+    align: center
+    search: false
+    theme_toggle: true
+  footer:
+    style: minimal
+    language_switcher: false
+  copyright:
+    notice: © {year} {name}
+  content:
+    math:
+      enable: true
+    toc:
+      enable: true
+    reading_time:
+      enable: false
+  search:
+    enable: false
+

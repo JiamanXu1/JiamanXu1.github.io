@@ -1,28 +1,27 @@
-# Jiaman Xu 的个人学术主页
+# JiamanXu1.github.io
 
-本仓库用于发布 `https://JiamanXu1.github.io`，基于 [Academic Pages](https://github.com/academicpages/academicpages.github.io) 构建。
+Jiaman Xu 的个人学术主页，基于 Hugo Blox 构建并通过 GitHub Actions 自动部署到 GitHub Pages。
 
-## 更新内容
+## 内容原则
 
-- 全站个人信息：编辑 `_config.yml`
-- 首页：编辑 `_pages/about.md`
-- 简历：编辑 `_pages/cv.md`
-- 论文、报告、教学与项目：分别编辑 `_publications/`、`_talks/`、`_teaching/`、`_portfolio/`
-- 图片：上传到 `images/`
-- PDF 等附件：上传到 `files/`
-
-完整的中文操作说明见网站页面 `_pages/update-guide.md`，发布后访问 `https://JiamanXu1.github.io/update-guide/`。
-
-## 自动发布
-
-推送到 `main` 分支后，`.github/workflows/deploy-pages.yml` 会构建并部署网站。首次使用时，请在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**。
+- 站点不包含参考模板作者的个人履历或学术成果。
+- 未提供的个人内容使用“请填写”或“待补充”标记。
+- 网站内置完整中文维护说明：发布后访问 `/update-guide/`。
 
 ## 本地预览
 
+需要 Hugo Extended 0.157.0、Node.js 20 和 pnpm：
+
 ```bash
-bundle config set --local path vendor/bundle
-bundle install
-bundle exec jekyll serve -l -H localhost
+pnpm install
+hugo server
 ```
 
-浏览器打开 `http://localhost:4000`。
+## 部署
+
+推送到 `main` 分支后，`.github/workflows/deploy.yml` 会自动构建并部署。线上地址：<https://JiamanXu1.github.io/>
+
+## 模板说明
+
+本网站的视觉结构参考了 [BlackiePiggy.github.io](https://github.com/BlackiePiggy/BlackiePiggy.github.io)，并重新编写全部个人内容与配置。参考仓库和 Hugo Blox 相关代码按其许可证使用，详见 `LICENSE.md`。
+
