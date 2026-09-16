@@ -220,11 +220,11 @@ content:
   video: media/home-intro.mp4
   poster: media/home-background.jpg
 design:
-  overlay_opacity: 0.82
+  overlay_opacity: 0.80
   overlay_duration: 1200
 ```
 
-- `overlay_opacity` 是深灰色遮罩的不透明度，范围为 `0` 至 `1`。当前 `0.82` 表示遮住约 82% 的背景颜色。
+- `overlay_opacity` 是深灰色遮罩的不透明度，范围为 `0` 至 `1`。当前 `0.80` 表示遮住 80% 的背景颜色。
 - `overlay_duration` 是遮罩从左向右展开所需的毫秒数，`1200` 即 1.2 秒。
 - 遮罩完成后，头像和个人文字才会淡入；随后页面才恢复正常滚动。
 - 键盘的向下键、Page Down、空格，以及手机向上滑动，也会触发同样的动画。

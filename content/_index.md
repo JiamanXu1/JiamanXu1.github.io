@@ -16,7 +16,7 @@ sections:
         url: cv/
     design:
       css_class: dark academic-video-section
-      overlay_opacity: 0.82
+      overlay_opacity: 0.80
       overlay_duration: 1200
       avatar:
         size: medium
