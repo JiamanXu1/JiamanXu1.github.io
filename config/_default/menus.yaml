@@ -8,19 +8,6 @@ main:
   - name: 研究成果
     url: publications/
     weight: 30
-  - name: 学术报告
-    url: event/
-    weight: 40
-  - name: 教学
-    url: teaching/
-    weight: 50
-  - name: 项目
-    url: projects/
-    weight: 60
-  - name: 简历
-    url: cv/
-    weight: 70
   - name: 网站更新指南
     url: update-guide/
-    weight: 80
-
+    weight: 40
