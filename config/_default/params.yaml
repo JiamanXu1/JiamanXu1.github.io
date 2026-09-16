@@ -3,8 +3,8 @@ hugoblox:
   identity:
     name: Jiaman Xu
     type: person
-    tagline: 请在作者资料中填写你的学术身份
-    description: Jiaman Xu 的个人学术主页
+    tagline: 南京大学新闻与传播学院2026级博士生
+    description: Jiaman Xu，南京大学新闻与传播学院2026级博士生的个人学术主页
   theme:
     mode: system
     pack: default
@@ -40,4 +40,3 @@ hugoblox:
       enable: false
   search:
     enable: false
-
