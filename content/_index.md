@@ -5,27 +5,28 @@ type: landing
 design:
   spacing: 6rem
 sections:
-  - block: resume-biography-3
+  - block: hero-video
     content:
       username: admin
-      text: ""
+      video: media/home-intro.mp4
+      poster: media/home-background.jpg
+      scroll_hint: 向下滚动进入主页
       button:
         text: 查看简历
         url: cv/
     design:
-      css_class: dark
+      css_class: dark academic-video-section
+      overlay_opacity: 0.82
+      overlay_duration: 1200
       avatar:
         size: medium
         shape: circle
-      background:
-        color: black
-        image:
-          filename: home-background.jpg
-          filters:
-            brightness: 0.72
-          size: cover
-          position: center
-          parallax: false
+      spacing:
+        padding:
+          - 0
+          - 0
+          - 0
+          - 0
   - block: markdown
     content:
       title: 欢迎访问我的学术主页
@@ -63,4 +64,3 @@ sections:
       view: article-grid
       columns: 3
 ---
-

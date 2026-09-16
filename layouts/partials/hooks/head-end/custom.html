@@ -3,6 +3,9 @@
 <meta name="application-name" content="{{ site.Title }}">
 <meta name="apple-mobile-web-app-title" content="{{ site.Title }}">
 <meta name="theme-color" content="#0f766e">
+{{ if .IsHome }}
+<script>document.documentElement.classList.add('academic-video-intro');</script>
+{{ end }}
 <style>
   :root {
     --academic-accent: #0f766e;
@@ -20,5 +23,40 @@
 
   article a {
     text-underline-offset: 0.18em;
+  }
+
+  .academic-video-intro .page-header {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-0.75rem);
+    transition: opacity 600ms ease, transform 600ms ease;
+  }
+
+  .academic-video-intro.academic-video-content-visible .page-header {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .academic-video-intro:not(.academic-video-unlocked) body {
+    overflow: hidden;
+  }
+
+  .academic-video-section {
+    overflow: hidden;
+    padding: 0 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .academic-video-intro .page-header {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+      transition: none;
+    }
+
+    .academic-video-intro:not(.academic-video-unlocked) body {
+      overflow: auto;
+    }
   }
 </style>

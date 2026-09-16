@@ -12,7 +12,9 @@ toc: true
 |---|---|
 | 姓名、身份、单位、个人简介、研究方向 | `content/authors/admin/_index.md` |
 | 头像 | `content/authors/admin/avatar.png` |
-| 首页结构、各板块标题、首页背景 | `content/_index.md` |
+| 首页结构、各板块标题、视频与遮罩参数 | `content/_index.md` |
+| 首页循环背景视频 | `static/media/home-intro.mp4` |
+| 视频加载失败时的备用图片 | `assets/media/home-background.jpg` |
 | 教育、工作、技能、语言、奖项数据 | `content/authors/admin/_index.md` |
 | 研究成果 | `content/publications/` |
 | 学术报告 | `content/event/` |
@@ -188,32 +190,52 @@ external_link: ""
 
 可以更改，而且目前已经做成易于维护的两层设置。
 
-### 更换首页照片背景
+### 更换首页循环视频
 
-最简单的办法是直接替换：
+首页目前使用 1920×1080 的 MP4 循环视频。最简单的更换方法是直接替换：
+
+```text
+static/media/home-intro.mp4
+```
+
+保持文件名不变即可，不需要修改其他文件。建议：
+
+- 使用 H.264 编码的 MP4，分辨率建议为 1920×1080。
+- 视频应能无缝循环，建议时长约 5–15 秒。
+- 为避免移动端加载过慢，建议文件不超过约 8 MB。
+- 视频不会播放声音；首页已设置 `muted`、`loop` 和 `playsinline`。
+
+如果浏览器禁止自动播放或视频尚未加载，网站会使用以下图片作为备用画面：
 
 ```text
 assets/media/home-background.jpg
 ```
 
-保持文件名不变即可。建议使用横向图片，宽度至少 1920 像素，并确保头像和白色文字在背景上清晰可见。
+### 修改遮罩和动画速度
 
-也可在 `content/_index.md` 的首页首个区块中修改：
+在 `content/_index.md` 的首页首个区块中修改：
 
 ```yaml
-background:
-  color: black
-  image:
-    filename: home-background.jpg
-    filters:
-      brightness: 0.72
-    size: cover
-    position: center
+content:
+  video: media/home-intro.mp4
+  poster: media/home-background.jpg
+design:
+  overlay_opacity: 0.82
+  overlay_duration: 1200
 ```
 
-- `brightness` 越小，背景越暗，建议保持在 `0.45` 至 `0.85`。
-- `position` 可用 `center`、`left`、`right`、`top` 或 `bottom` 调整裁切重点。
-- `size: cover` 会让图片铺满区域。
+- `overlay_opacity` 是深灰色遮罩的不透明度，范围为 `0` 至 `1`。当前 `0.82` 表示遮住约 82% 的背景颜色。
+- `overlay_duration` 是遮罩从左向右展开所需的毫秒数，`1200` 即 1.2 秒。
+- 遮罩完成后，头像和个人文字才会淡入；随后页面才恢复正常滚动。
+- 键盘的向下键、Page Down、空格，以及手机向上滑动，也会触发同样的动画。
+
+完整动画样式与逻辑位于：
+
+```text
+layouts/_partials/blox/hero-video.html
+```
+
+如果系统开启“减少动态效果”，网站会跳过过渡动画、暂停视频并直接显示内容，以保证无障碍访问。
 
 ### 更改普通页面背景
 
@@ -256,4 +278,3 @@ layouts/partials/hooks/head-end/custom.html
 - 图片大小合理，建议单张不超过约 2 MB。
 - GitHub Actions 构建成功。
 - 电脑和手机端均可打开首页、内容页与本指南。
-
