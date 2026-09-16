@@ -12,9 +12,9 @@ profiles:
     url: https://github.com/JiamanXu1
     label: GitHub
 interests:
-  - 请填写研究方向一
-  - 请填写研究方向二
-  - 请填写研究方向三
+  - 地缘政治与国际传播
+  - 数字社会与网络文化研究
+  - 媒介话语的跨国实践
 education: []
 work: []
 skills: []
