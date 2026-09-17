@@ -51,7 +51,49 @@
     padding-top: 0 !important;
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
+  }
+
+  .page-body > .hbb-section {
+    box-sizing: border-box;
+    min-height: 100svh;
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .page-body > .hbb-section:not(.academic-video-section) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #section-markdown {
+    background: rgba(248, 250, 252, 0.96);
+  }
+
+  #publications {
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .dark #section-markdown {
+    background: rgba(15, 23, 42, 0.98);
+  }
+
+  .dark #publications {
+    border-top-color: rgba(255, 255, 255, 0.08);
+    background: rgba(17, 24, 39, 0.98);
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
     .page-header.academic-home-header {
       transition: none;
     }
