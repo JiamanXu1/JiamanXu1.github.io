@@ -121,6 +121,34 @@ sections:
           image: media/academic-work-cthulhu.png
           image_alt: 克苏鲁风格生物素描
           image_position: center
+        - year: xxxx年
+          title: 名称
+          detail_title: 名称
+          summary: 学术作品摘要呈现
+          detail: 学术作品详细内容呈现
+          image: ""
+          image_alt: 学术作品图片
+        - year: xxxx年
+          title: 名称
+          detail_title: 名称
+          summary: 学术作品摘要呈现
+          detail: 学术作品详细内容呈现
+          image: ""
+          image_alt: 学术作品图片
+        - year: xxxx年
+          title: 名称
+          detail_title: 名称
+          summary: 学术作品摘要呈现
+          detail: 学术作品详细内容呈现
+          image: ""
+          image_alt: 学术作品图片
+        - year: xxxx年
+          title: 名称
+          detail_title: 名称
+          summary: 学术作品摘要呈现
+          detail: 学术作品详细内容呈现
+          image: ""
+          image_alt: 学术作品图片
     design:
       css_class: academic-gallery-section
   - block: collection

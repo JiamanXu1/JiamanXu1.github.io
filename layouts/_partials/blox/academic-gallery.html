@@ -1,4 +1,4 @@
-{{/* Four-card academic works gallery with an in-place expanding detail panel. */}}
+{{/* Eight-card academic works carousel with an in-place expanding detail panel. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 {{ $items := $block.content.items }}
@@ -17,51 +17,67 @@
   </header>
 
   <div class="academic-work-gallery__stage">
-    <div class="academic-work-gallery__grid" aria-label="学术作品列表">
-      {{ range $index, $item := $items }}
-        <article class="academic-work-card">
-          <div class="academic-work-card__media">
-            {{ with $item.image }}
-              <img
-                src="{{ . | relURL }}"
-                alt="{{ $item.image_alt | default $item.title }}"
-                style="object-fit: {{ $item.image_fit | default "cover" }}; object-position: {{ $item.image_position | default "center" }};"
-              >
-            {{ else }}
-              <div class="academic-work-card__placeholder" aria-label="图片插入区域">
-                <svg viewBox="0 0 48 48" aria-hidden="true">
-                  <path d="M9 11.5h30v25H9zM14 31l7.5-8 5.5 5 4-4 5 7M31 18.5h.01"/>
-                </svg>
-                <span>图片插入区域</span>
-              </div>
-            {{ end }}
-          </div>
+    <div class="academic-work-gallery__viewport">
+      <div class="academic-work-gallery__grid" aria-label="学术作品列表">
+        {{ range $index, $item := $items }}
+          <article class="academic-work-card">
+            <div class="academic-work-card__media">
+              {{ with $item.image }}
+                <img
+                  src="{{ . | relURL }}"
+                  alt="{{ $item.image_alt | default $item.title }}"
+                  style="object-fit: {{ $item.image_fit | default "cover" }}; object-position: {{ $item.image_position | default "center" }};"
+                >
+              {{ else }}
+                <div class="academic-work-card__placeholder" aria-label="图片插入区域">
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <path d="M9 11.5h30v25H9zM14 31l7.5-8 5.5 5 4-4 5 7M31 18.5h.01"/>
+                  </svg>
+                  <span>图片插入区域</span>
+                </div>
+              {{ end }}
+            </div>
 
-          <div class="academic-work-card__body">
-            <p class="academic-work-card__year">{{ $item.year | default "xxxx年" }}</p>
-            <h3>{{ $item.title | default "名称" | $page.RenderString }}</h3>
-            <div class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" | $page.RenderString }}</div>
-            <button
-              class="academic-work-card__more"
-              type="button"
-              aria-expanded="false"
-              aria-controls="academic-work-detail"
-              data-card-index="{{ $index }}">
-              more
-            </button>
-            <div class="academic-work-card__detail-title-source" hidden>
-              {{ $item.detail_title | default $item.title | default "名称" | $page.RenderString }}
+            <div class="academic-work-card__body">
+              <p class="academic-work-card__year">{{ $item.year | default "xxxx年" }}</p>
+              <h3>{{ $item.title | default "名称" | $page.RenderString }}</h3>
+              <div class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" | $page.RenderString }}</div>
+              <button
+                class="academic-work-card__more"
+                type="button"
+                aria-expanded="false"
+                aria-controls="academic-work-detail"
+                data-card-index="{{ $index }}">
+                more
+              </button>
+              <div class="academic-work-card__detail-title-source" hidden>
+                {{ $item.detail_title | default $item.title | default "名称" | $page.RenderString }}
+              </div>
+              <div class="academic-work-card__detail-source" data-indent="{{ $item.detail_indent | default false }}" hidden>
+                {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
+              </div>
             </div>
-            <div class="academic-work-card__detail-source" data-indent="{{ $item.detail_indent | default false }}" hidden>
-              {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
-            </div>
-          </div>
-        </article>
-      {{ end }}
+          </article>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="academic-work-gallery__controls" aria-label="学术作品卡片分页">
+      <button class="academic-work-gallery__arrow academic-work-gallery__arrow--previous" type="button" aria-label="查看上一组学术作品" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+      </button>
+      <p class="academic-work-gallery__pagination" aria-live="polite">
+        <span class="academic-work-gallery__current-page">1</span>
+        <span aria-hidden="true">/</span>
+        <span class="academic-work-gallery__page-count">2</span>
+      </p>
+      <button class="academic-work-gallery__arrow academic-work-gallery__arrow--next" type="button" aria-label="查看下一组学术作品">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
     </div>
 
     <article id="academic-work-detail" class="academic-work-detail" aria-hidden="true">
-      <button class="academic-work-detail__back" type="button" aria-label="返回四张卡片">
+      <button class="academic-work-detail__back" type="button" aria-label="返回学术作品卡片">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m15 5-7 7 7 7M8 12h11"/>
         </svg>
@@ -130,19 +146,128 @@
     perspective: 1600px;
   }
 
-  .academic-work-gallery__grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(.8rem, 1.5vw, 1.5rem);
+  .academic-work-gallery__viewport {
     height: 100%;
+    overflow: hidden;
     opacity: 1;
     transform: perspective(1400px) rotateY(0) scale(1);
     transform-origin: center;
     transition: opacity 320ms ease, transform 560ms cubic-bezier(.22, 1, .36, 1);
   }
 
-  .academic-work-gallery__grid[aria-hidden="true"] {
+  .academic-work-gallery__viewport[aria-hidden="true"] {
     visibility: hidden;
+  }
+
+  .academic-work-gallery__grid {
+    --academic-gallery-gap: 1.25rem;
+    --academic-gallery-shift: 0px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: minmax(0, 1fr);
+    grid-auto-columns: calc(25% - .9375rem);
+    column-gap: var(--academic-gallery-gap);
+    height: 100%;
+    transform: translate3d(var(--academic-gallery-shift), 0, 0);
+    transition: transform 620ms cubic-bezier(.22, 1, .36, 1);
+    will-change: transform;
+  }
+
+  .academic-work-gallery__controls {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 180ms ease;
+  }
+
+  .academic-work-gallery__arrow {
+    position: absolute;
+    top: 50%;
+    width: clamp(2.65rem, 3.25vw, 3.35rem);
+    height: clamp(2.65rem, 3.25vw, 3.35rem);
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(17, 17, 17, .34);
+    border-radius: 50%;
+    color: #171713;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translateY(-50%);
+    transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease, opacity 180ms ease, transform 180ms ease;
+  }
+
+  .academic-work-gallery__arrow--previous {
+    left: clamp(-3.7rem, -3.4vw, -2.8rem);
+  }
+
+  .academic-work-gallery__arrow--next {
+    right: clamp(-3.7rem, -3.4vw, -2.8rem);
+  }
+
+  .academic-work-gallery__arrow:not(:disabled):hover {
+    color: #fff;
+    background: #171713;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .2);
+  }
+
+  .academic-work-gallery__arrow--previous:not(:disabled):hover {
+    transform: translate(-3px, -50%);
+  }
+
+  .academic-work-gallery__arrow--next:not(:disabled):hover {
+    transform: translate(3px, -50%);
+  }
+
+  .academic-work-gallery__arrow:disabled {
+    opacity: .25;
+    cursor: default;
+  }
+
+  .academic-work-gallery__arrow svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .academic-work-gallery__arrow--previous:not(:disabled) svg {
+    animation: academic-gallery-nudge-left 1.65s ease-in-out infinite;
+  }
+
+  .academic-work-gallery__arrow--next:not(:disabled) svg {
+    animation: academic-gallery-nudge-right 1.65s ease-in-out infinite;
+  }
+
+  .academic-work-gallery__pagination {
+    position: absolute;
+    right: 0;
+    bottom: -1.75rem;
+    left: 0;
+    margin: 0;
+    color: rgba(17, 17, 17, .68);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: .8rem;
+    letter-spacing: .16em;
+    text-align: center;
+  }
+
+  @keyframes academic-gallery-nudge-left {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-3px); }
+  }
+
+  @keyframes academic-gallery-nudge-right {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
   }
 
   .academic-work-card {
@@ -279,10 +404,15 @@
       visibility 0s linear 560ms;
   }
 
-  .academic-work-gallery__stage.is-open .academic-work-gallery__grid {
+  .academic-work-gallery__stage.is-open .academic-work-gallery__viewport {
     opacity: 0;
     pointer-events: none;
     transform: perspective(1400px) rotateY(8deg) scale(.95);
+  }
+
+  .academic-work-gallery__stage.is-open .academic-work-gallery__controls {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .academic-work-gallery__stage.is-open .academic-work-detail {
@@ -364,21 +494,17 @@
   }
 
   @media (max-width: 960px) {
-    .academic-work-gallery__stage {
-      overflow: hidden;
-    }
-
     .academic-work-gallery__grid {
-      grid-template-columns: repeat(4, minmax(72vw, 1fr));
-      gap: 1rem;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x mandatory;
-      padding-bottom: .5rem;
+      --academic-gallery-gap: 1rem;
+      grid-auto-columns: calc(100% - 3.5rem);
     }
 
-    .academic-work-card {
-      scroll-snap-align: center;
+    .academic-work-gallery__arrow--previous {
+      left: .55rem;
+    }
+
+    .academic-work-gallery__arrow--next {
+      right: .55rem;
     }
   }
 
@@ -402,10 +528,6 @@
       height: min(68vh, 540px);
     }
 
-    .academic-work-gallery__grid {
-      grid-template-columns: repeat(4, minmax(82vw, 1fr));
-    }
-
     .academic-work-detail__content {
       width: 84%;
       padding-top: 5.75rem;
@@ -413,9 +535,14 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .academic-work-gallery__viewport,
     .academic-work-gallery__grid,
     .academic-work-detail {
       transition: none;
+    }
+
+    .academic-work-gallery__arrow svg {
+      animation: none !important;
     }
   }
 </style>
@@ -428,7 +555,13 @@
 
     const stage = gallery.querySelector('.academic-work-gallery__stage');
     const backgroundVideo = gallery.parentElement?.querySelector('.academic-gallery-background__video');
+    const viewport = gallery.querySelector('.academic-work-gallery__viewport');
     const grid = gallery.querySelector('.academic-work-gallery__grid');
+    const cards = [...gallery.querySelectorAll('.academic-work-card')];
+    const previousButton = gallery.querySelector('.academic-work-gallery__arrow--previous');
+    const nextButton = gallery.querySelector('.academic-work-gallery__arrow--next');
+    const currentPageLabel = gallery.querySelector('.academic-work-gallery__current-page');
+    const pageCountLabel = gallery.querySelector('.academic-work-gallery__page-count');
     const detail = gallery.querySelector('.academic-work-detail');
     const detailTitle = gallery.querySelector('.academic-work-detail__title');
     const detailBody = gallery.querySelector('.academic-work-detail__body');
@@ -436,12 +569,50 @@
     const moreButtons = [...gallery.querySelectorAll('.academic-work-card__more')];
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let activeButton = null;
+    let carouselPage = 0;
+    let resizeFrame = null;
+    let touchStartX = null;
 
     if (reducedMotion) {
       backgroundVideo?.pause();
     } else {
       backgroundVideo?.play().catch(() => {});
     }
+
+    const cardsPerPage = () => window.matchMedia('(max-width: 960px)').matches ? 1 : 4;
+
+    const pageCount = () => Math.max(1, Math.ceil(cards.length / cardsPerPage()));
+
+    const updateCarousel = () => {
+      const perPage = cardsPerPage();
+      const totalPages = pageCount();
+      carouselPage = Math.min(carouselPage, totalPages - 1);
+
+      const cardWidth = cards[0]?.getBoundingClientRect().width || 0;
+      const gap = Number.parseFloat(window.getComputedStyle(grid).columnGap) || 0;
+      const shift = carouselPage * perPage * (cardWidth + gap);
+      grid.style.setProperty('--academic-gallery-shift', `${-shift}px`);
+
+      previousButton.disabled = carouselPage === 0;
+      nextButton.disabled = carouselPage === totalPages - 1;
+      currentPageLabel.textContent = String(carouselPage + 1);
+      pageCountLabel.textContent = String(totalPages);
+      viewport.setAttribute('aria-label', `学术作品第 ${carouselPage + 1} 页，共 ${totalPages} 页`);
+
+      const firstVisibleCard = carouselPage * perPage;
+      cards.forEach((card, index) => {
+        const isVisible = index >= firstVisibleCard && index < firstVisibleCard + perPage;
+        card.toggleAttribute('inert', !isVisible);
+        card.setAttribute('aria-hidden', String(!isVisible));
+      });
+    };
+
+    const moveCarousel = (direction) => {
+      const nextPage = Math.min(Math.max(carouselPage + direction, 0), pageCount() - 1);
+      if (nextPage === carouselPage) return;
+      carouselPage = nextPage;
+      updateCarousel();
+    };
 
     const openCard = (button) => {
       const card = button.closest('.academic-work-card');
@@ -454,12 +625,12 @@
       moreButtons.forEach((item) => item.setAttribute('aria-expanded', String(item === button)));
       detail.setAttribute('aria-hidden', 'false');
       stage.classList.add('is-open');
-      window.setTimeout(() => grid.setAttribute('aria-hidden', 'true'), 320);
+      window.setTimeout(() => viewport.setAttribute('aria-hidden', 'true'), 320);
       window.setTimeout(() => backButton.focus(), 420);
     };
 
     const closeCard = () => {
-      grid.setAttribute('aria-hidden', 'false');
+      viewport.setAttribute('aria-hidden', 'false');
       stage.classList.remove('is-open');
       detail.setAttribute('aria-hidden', 'true');
       moreButtons.forEach((item) => item.setAttribute('aria-expanded', 'false'));
@@ -468,8 +639,36 @@
 
     moreButtons.forEach((button) => button.addEventListener('click', () => openCard(button)));
     backButton.addEventListener('click', closeCard);
+    previousButton.addEventListener('click', () => moveCarousel(-1));
+    nextButton.addEventListener('click', () => moveCarousel(1));
+
+    viewport.addEventListener('touchstart', (event) => {
+      touchStartX = event.touches[0]?.clientX ?? null;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (event) => {
+      const touchEndX = event.changedTouches[0]?.clientX;
+      if (touchStartX === null || touchEndX === undefined) return;
+      const distance = touchEndX - touchStartX;
+      if (Math.abs(distance) > 52) moveCarousel(distance > 0 ? -1 : 1);
+      touchStartX = null;
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      if (resizeFrame !== null) window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = null;
+        updateCarousel();
+      });
+    }, { passive: true });
+
     gallery.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && stage.classList.contains('is-open')) closeCard();
+      if (stage.classList.contains('is-open')) return;
+      if (event.key === 'ArrowLeft') moveCarousel(-1);
+      if (event.key === 'ArrowRight') moveCarousel(1);
     });
+
+    updateCarousel();
   })();
 </script>

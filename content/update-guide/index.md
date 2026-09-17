@@ -188,7 +188,7 @@ external_link: ""
 
 ## 修改首页学术作品卡片
 
-首页“欢迎访问我的学术主页”区域的四张卡片位于：
+首页“欢迎访问我的学术主页”区域共有八张卡片，电脑端每页显示四张，可通过两侧箭头切换；手机端每页显示一张，也可左右滑动。卡片内容位于：
 
 ```text
 content/_index.md
@@ -226,7 +226,9 @@ background_opacity: 0.20
 - `image_fit`：普通照片使用 `cover`；需要完整显示的图表或竖版图片使用 `contain`。
 - `image_position`：图片裁切焦点，通常使用 `center`、`left` 或 `right`。
 
-建议将四张图片上传到 `static/media/`，例如 `static/media/academic-work-1.jpg`，然后将 `image` 填写为 `media/academic-work-1.jpg`。四张图使用相近的长宽比会让页面更整齐。
+第五至第八项已保留为空白占位卡片，直接替换对应项中的 `year`、`title`、`summary`、`detail` 和 `image` 即可，不需要修改轮播脚本。
+
+建议将卡片图片上传到 `static/media/`，例如 `static/media/academic-work-5.jpg`，然后将 `image` 填写为 `media/academic-work-5.jpg`。八张图使用相近的长宽比会让页面更整齐。
 
 ## 更换学术页背景
 
