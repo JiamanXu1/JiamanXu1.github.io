@@ -28,11 +28,36 @@ sections:
           - 0
           - 0
           - 0
-  - block: markdown
+  - block: academic-gallery
     content:
       title: 欢迎访问我的学术主页
-      text: |-
-        本站用于展示个人简介、学术经历与研究成果。所有需要替换的文字均以“请填写”或“待补充”标出，便于后续逐项更新。
+      items:
+        - year: xxxx年
+          title: 名称
+          summary: 学术作品摘要呈现
+          detail: |-
+            学术作品详细内容呈现
+          image: ""
+        - year: xxxx年
+          title: 名称
+          summary: 学术作品摘要呈现
+          detail: |-
+            学术作品详细内容呈现
+          image: ""
+        - year: xxxx年
+          title: 名称
+          summary: 学术作品摘要呈现
+          detail: |-
+            学术作品详细内容呈现
+          image: ""
+        - year: xxxx年
+          title: 名称
+          summary: 学术作品摘要呈现
+          detail: |-
+            学术作品详细内容呈现
+          image: ""
+    design:
+      css_class: academic-gallery-section
   - block: collection
     id: publications
     content:

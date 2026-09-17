@@ -1,0 +1,408 @@
+{{/* Four-card academic works gallery with an in-place expanding detail panel. */}}
+{{ $block := .wcBlock }}
+{{ $items := $block.content.items }}
+
+<div id="academic-work-gallery" class="academic-work-gallery">
+  <header class="academic-work-gallery__header">
+    <h2>{{ $block.content.title | default "欢迎访问我的学术主页" }}</h2>
+  </header>
+
+  <div class="academic-work-gallery__stage">
+    <div class="academic-work-gallery__grid" aria-label="学术作品列表">
+      {{ range $index, $item := $items }}
+        <article class="academic-work-card">
+          <div class="academic-work-card__media">
+            {{ with $item.image }}
+              <img src="{{ . | relURL }}" alt="{{ $item.image_alt | default $item.title }}">
+            {{ else }}
+              <div class="academic-work-card__placeholder" aria-label="图片插入区域">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                  <path d="M9 11.5h30v25H9zM14 31l7.5-8 5.5 5 4-4 5 7M31 18.5h.01"/>
+                </svg>
+                <span>图片插入区域</span>
+              </div>
+            {{ end }}
+          </div>
+
+          <div class="academic-work-card__body">
+            <p class="academic-work-card__year">{{ $item.year | default "xxxx年" }}</p>
+            <h3>{{ $item.title | default "名称" }}</h3>
+            <p class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" }}</p>
+            <button
+              class="academic-work-card__more"
+              type="button"
+              aria-expanded="false"
+              aria-controls="academic-work-detail"
+              data-card-index="{{ $index }}">
+              more
+            </button>
+            <div class="academic-work-card__detail-source" hidden>
+              {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+
+    <article id="academic-work-detail" class="academic-work-detail" aria-hidden="true">
+      <button class="academic-work-detail__back" type="button" aria-label="返回四张卡片">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m15 5-7 7 7 7M8 12h11"/>
+        </svg>
+      </button>
+      <div class="academic-work-detail__content">
+        <h3 class="academic-work-detail__title">名称</h3>
+        <div class="academic-work-detail__body">学术作品详细内容呈现</div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<style>
+  .blox-academic-gallery {
+    padding: clamp(4.5rem, 8vh, 6rem) 0 clamp(1.25rem, 3vh, 2rem) !important;
+    background: #f7f7f4 !important;
+  }
+
+  .academic-work-gallery {
+    width: min(92vw, 1680px);
+    margin: 0 auto;
+    color: #111;
+  }
+
+  .academic-work-gallery__header {
+    margin-bottom: clamp(1.1rem, 2.5vh, 2rem);
+    padding-bottom: clamp(.8rem, 1.5vh, 1.25rem);
+    border-bottom: 1px solid rgba(17, 17, 17, .5);
+    text-align: center;
+  }
+
+  .academic-work-gallery__header h2 {
+    margin: 0;
+    color: #111;
+    font-family: "Times New Roman", "Songti SC", "STSong", Georgia, serif;
+    font-size: clamp(2rem, 4vw, 4.25rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: .035em;
+  }
+
+  .academic-work-gallery__stage {
+    position: relative;
+    height: clamp(410px, 62vh, 610px);
+    perspective: 1600px;
+  }
+
+  .academic-work-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(.8rem, 1.5vw, 1.5rem);
+    height: 100%;
+    opacity: 1;
+    transform: perspective(1400px) rotateY(0) scale(1);
+    transform-origin: center;
+    transition: opacity 320ms ease, transform 560ms cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .academic-work-gallery__grid[aria-hidden="true"] {
+    visibility: hidden;
+  }
+
+  .academic-work-card {
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid rgba(17, 17, 17, .48);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+
+  .academic-work-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, .13);
+  }
+
+  .academic-work-card__media {
+    flex: 0 0 52%;
+    min-height: 0;
+    overflow: hidden;
+    background: #ecece8;
+    border-bottom: 1px solid rgba(17, 17, 17, .22);
+  }
+
+  .academic-work-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .academic-work-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: .65rem;
+    color: #77776f;
+    background:
+      linear-gradient(135deg, transparent 49.6%, rgba(17,17,17,.055) 49.8%, rgba(17,17,17,.055) 50.2%, transparent 50.4%),
+      #efefeb;
+  }
+
+  .academic-work-card__placeholder svg {
+    width: 2.2rem;
+    height: 2.2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+  }
+
+  .academic-work-card__placeholder span {
+    font-size: .74rem;
+    letter-spacing: .12em;
+  }
+
+  .academic-work-card__body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(.85rem, 1.4vw, 1.35rem);
+  }
+
+  .academic-work-card__year {
+    margin: 0 0 .5rem;
+    color: #5f5f5a;
+    font-size: clamp(.7rem, .8vw, .82rem);
+    line-height: 1.2;
+  }
+
+  .academic-work-card h3 {
+    margin: 0 0 .65rem;
+    color: #111;
+    font-family: "Times New Roman", "Songti SC", "STSong", Georgia, serif;
+    font-size: clamp(1.15rem, 1.55vw, 1.55rem);
+    font-weight: 500;
+    line-height: 1.18;
+  }
+
+  .academic-work-card__summary {
+    margin: 0;
+    color: #3f3f3a;
+    font-size: clamp(.78rem, .9vw, .94rem);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .academic-work-card__more {
+    align-self: flex-end;
+    margin-top: auto;
+    padding: .45rem 0 .15rem .8rem;
+    border: 0;
+    color: #111;
+    background: transparent;
+    font-family: Georgia, serif;
+    font-size: .84rem;
+    font-style: italic;
+    text-decoration: underline;
+    text-underline-offset: .2em;
+    cursor: pointer;
+  }
+
+  .academic-work-card__more:hover {
+    color: #555;
+  }
+
+  .academic-work-detail {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    overflow: auto;
+    background: #fff;
+    border: 1.5px solid #111;
+    box-shadow: 0 18px 55px rgba(15, 23, 42, .14);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: perspective(1400px) rotateY(-10deg) scale(.93);
+    transform-origin: center;
+    transition:
+      opacity 320ms ease,
+      transform 560ms cubic-bezier(.22, 1, .36, 1),
+      visibility 0s linear 560ms;
+  }
+
+  .academic-work-gallery__stage.is-open .academic-work-gallery__grid {
+    opacity: 0;
+    pointer-events: none;
+    transform: perspective(1400px) rotateY(8deg) scale(.95);
+  }
+
+  .academic-work-gallery__stage.is-open .academic-work-detail {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: perspective(1400px) rotateY(0) scale(1);
+    transition-delay: 80ms;
+  }
+
+  .academic-work-detail__back {
+    position: absolute;
+    top: clamp(1rem, 2vw, 1.6rem);
+    left: clamp(1rem, 2vw, 1.6rem);
+    width: 2.65rem;
+    height: 2.65rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(17, 17, 17, .36);
+    border-radius: 50%;
+    color: #111;
+    background: #fff;
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+
+  .academic-work-detail__back:hover {
+    background: #f1f1ee;
+    transform: translateX(-2px);
+  }
+
+  .academic-work-detail__back svg {
+    width: 1.3rem;
+    height: 1.3rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .academic-work-detail__content {
+    width: min(78%, 980px);
+    margin: 0 auto;
+    padding: clamp(5rem, 12vh, 8rem) 0 clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .academic-work-detail__title {
+    margin: 0 0 clamp(1.5rem, 4vh, 2.75rem);
+    color: #111;
+    font-family: "Times New Roman", "Songti SC", "STSong", Georgia, serif;
+    font-size: clamp(2.1rem, 4vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+
+  .academic-work-detail__body {
+    color: #292925;
+    font-size: clamp(1rem, 1.35vw, 1.3rem);
+    line-height: 1.9;
+  }
+
+  .academic-work-detail__body p {
+    margin: 0 0 1.25em;
+  }
+
+  @media (max-width: 960px) {
+    .academic-work-gallery__stage {
+      overflow: hidden;
+    }
+
+    .academic-work-gallery__grid {
+      grid-template-columns: repeat(4, minmax(72vw, 1fr));
+      gap: 1rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      padding-bottom: .5rem;
+    }
+
+    .academic-work-card {
+      scroll-snap-align: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blox-academic-gallery {
+      padding-top: 4.25rem !important;
+      padding-bottom: 1rem !important;
+    }
+
+    .academic-work-gallery {
+      width: 92vw;
+    }
+
+    .academic-work-gallery__header h2 {
+      font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+
+    .academic-work-gallery__stage {
+      height: min(68vh, 540px);
+    }
+
+    .academic-work-gallery__grid {
+      grid-template-columns: repeat(4, minmax(82vw, 1fr));
+    }
+
+    .academic-work-detail__content {
+      width: 84%;
+      padding-top: 5.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .academic-work-gallery__grid,
+    .academic-work-detail {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const gallery = document.getElementById('academic-work-gallery');
+    if (!gallery || gallery.dataset.initialized === 'true') return;
+    gallery.dataset.initialized = 'true';
+
+    const stage = gallery.querySelector('.academic-work-gallery__stage');
+    const grid = gallery.querySelector('.academic-work-gallery__grid');
+    const detail = gallery.querySelector('.academic-work-detail');
+    const detailTitle = gallery.querySelector('.academic-work-detail__title');
+    const detailBody = gallery.querySelector('.academic-work-detail__body');
+    const backButton = gallery.querySelector('.academic-work-detail__back');
+    const moreButtons = [...gallery.querySelectorAll('.academic-work-card__more')];
+    let activeButton = null;
+
+    const openCard = (button) => {
+      const card = button.closest('.academic-work-card');
+      if (!card) return;
+      activeButton = button;
+      detailTitle.textContent = card.querySelector('h3')?.textContent?.trim() || '名称';
+      detailBody.innerHTML = card.querySelector('.academic-work-card__detail-source')?.innerHTML || '';
+      moreButtons.forEach((item) => item.setAttribute('aria-expanded', String(item === button)));
+      detail.setAttribute('aria-hidden', 'false');
+      stage.classList.add('is-open');
+      window.setTimeout(() => grid.setAttribute('aria-hidden', 'true'), 320);
+      window.setTimeout(() => backButton.focus(), 420);
+    };
+
+    const closeCard = () => {
+      grid.setAttribute('aria-hidden', 'false');
+      stage.classList.remove('is-open');
+      detail.setAttribute('aria-hidden', 'true');
+      moreButtons.forEach((item) => item.setAttribute('aria-expanded', 'false'));
+      window.setTimeout(() => activeButton?.focus(), 320);
+    };
+
+    moreButtons.forEach((button) => button.addEventListener('click', () => openCard(button)));
+    backButton.addEventListener('click', closeCard);
+    gallery.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && stage.classList.contains('is-open')) closeCard();
+    });
+  })();
+</script>

@@ -186,6 +186,33 @@ external_link: ""
 
 更新 PDF 时保持文件名不变，原链接会继续有效。请不要给按钮添加 `download` 属性，否则浏览器会倾向于下载文件而不是打开阅读页面。
 
+## 修改首页学术作品卡片
+
+首页“欢迎访问我的学术主页”区域的四张卡片位于：
+
+```text
+content/_index.md
+```
+
+找到 `block: academic-gallery`。每张卡片包含以下字段：
+
+```yaml
+- year: 2026年
+  title: 学术作品名称
+  summary: 卡片上显示的简短摘要
+  detail: |-
+    点击 more 后显示的完整介绍，可以写成多段文字。
+  image: media/academic-work-1.jpg
+```
+
+- `year`：卡片第一行年份。
+- `title`：卡片和展开大卡片中的大标题。
+- `summary`：小卡片上的学术作品摘要。
+- `detail`：点击 `more` 后大卡片中的详细内容，支持 Markdown 段落。
+- `image`：图片路径。留空时显示“图片插入区域”占位框。
+
+建议将四张图片上传到 `static/media/`，例如 `static/media/academic-work-1.jpg`，然后将 `image` 填写为 `media/academic-work-1.jpg`。四张图使用相近的长宽比会让页面更整齐。
+
 ## 更换学术页背景
 
 可以更改，而且目前已经做成易于维护的两层设置。
