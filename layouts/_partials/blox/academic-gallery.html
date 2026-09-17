@@ -1,4 +1,4 @@
-{{/* Eight-card academic works carousel with an in-place expanding detail panel. */}}
+{{/* Eight-card academic works carousel linking to standalone detail pages. */}}
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 {{ $items := $block.content.items }}
@@ -42,20 +42,12 @@
               <p class="academic-work-card__year">{{ $item.year | default "xxxx年" }}</p>
               <h3>{{ $item.title | default "名称" | $page.RenderString }}</h3>
               <div class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" | $page.RenderString }}</div>
-              <button
+              <a
                 class="academic-work-card__more"
-                type="button"
-                aria-expanded="false"
-                aria-controls="academic-work-detail"
-                data-card-index="{{ $index }}">
+                href="{{ printf "academic-work/%d/" (add $index 1) | relURL }}"
+                aria-label="阅读《{{ $item.detail_title | default $item.title | default "名称" | plainify }}》完整内容">
                 more
-              </button>
-              <div class="academic-work-card__detail-title-source" hidden>
-                {{ $item.detail_title | default $item.title | default "名称" | $page.RenderString }}
-              </div>
-              <div class="academic-work-card__detail-source" data-indent="{{ $item.detail_indent | default false }}" hidden>
-                {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
-              </div>
+              </a>
             </div>
           </article>
         {{ end }}
@@ -76,17 +68,6 @@
       </button>
     </div>
 
-    <article id="academic-work-detail" class="academic-work-detail" aria-hidden="true">
-      <button class="academic-work-detail__back" type="button" aria-label="返回学术作品卡片">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m15 5-7 7 7 7M8 12h11"/>
-        </svg>
-      </button>
-      <div class="academic-work-detail__content">
-        <h3 class="academic-work-detail__title">名称</h3>
-        <div class="academic-work-detail__body">学术作品详细内容呈现</div>
-      </div>
-    </article>
   </div>
 </div>
 
@@ -385,114 +366,6 @@
     color: #555;
   }
 
-  .academic-work-detail {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    overflow: auto;
-    background: #fff;
-    border: 1.5px solid #111;
-    box-shadow: 0 18px 55px rgba(15, 23, 42, .14);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: perspective(1400px) rotateY(-10deg) scale(.93);
-    transform-origin: center;
-    transition:
-      opacity 320ms ease,
-      transform 560ms cubic-bezier(.22, 1, .36, 1),
-      visibility 0s linear 560ms;
-  }
-
-  .academic-work-gallery__stage.is-open .academic-work-gallery__viewport {
-    opacity: 0;
-    pointer-events: none;
-    transform: perspective(1400px) rotateY(8deg) scale(.95);
-  }
-
-  .academic-work-gallery__stage.is-open .academic-work-gallery__controls {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .academic-work-gallery__stage.is-open .academic-work-detail {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: perspective(1400px) rotateY(0) scale(1);
-    transition-delay: 80ms;
-  }
-
-  .academic-work-detail__back {
-    position: absolute;
-    top: clamp(1rem, 2vw, 1.6rem);
-    left: clamp(1rem, 2vw, 1.6rem);
-    width: 2.65rem;
-    height: 2.65rem;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(17, 17, 17, .36);
-    border-radius: 50%;
-    color: #111;
-    background: #fff;
-    cursor: pointer;
-    transition: background 180ms ease, transform 180ms ease;
-  }
-
-  .academic-work-detail__back:hover {
-    background: #f1f1ee;
-    transform: translateX(-2px);
-  }
-
-  .academic-work-detail__back svg {
-    width: 1.3rem;
-    height: 1.3rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .academic-work-detail__content {
-    width: min(78%, 980px);
-    margin: 0 auto;
-    padding: clamp(5rem, 12vh, 8rem) 0 clamp(2.5rem, 6vh, 4rem);
-  }
-
-  .academic-work-detail__title {
-    margin: 0 0 clamp(1.5rem, 4vh, 2.75rem);
-    color: #111;
-    font-family: "Times New Roman", "Songti SC", "STSong", Georgia, serif;
-    font-size: clamp(2.1rem, 4vw, 4.5rem);
-    font-weight: 500;
-    line-height: 1.08;
-  }
-
-  .academic-work-detail__body {
-    color: #292925;
-    font-size: clamp(1rem, 1.35vw, 1.3rem);
-    line-height: 1.9;
-  }
-
-  .academic-work-detail__body p {
-    margin: 0 0 1.25em;
-  }
-
-  .academic-work-detail__body h2 {
-    margin: 1.8em 0 .8em;
-    color: #171713;
-    font-family: "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
-    font-size: clamp(1.2rem, 2.1vw, 1.65rem);
-    font-weight: 700;
-    line-height: 1.45;
-    text-indent: 0;
-  }
-
-  .academic-work-detail__body.is-indented p {
-    text-indent: 2em;
-  }
-
   @media (max-width: 960px) {
     .academic-work-gallery__grid {
       --academic-gallery-gap: 1rem;
@@ -528,16 +401,11 @@
       height: min(68vh, 540px);
     }
 
-    .academic-work-detail__content {
-      width: 84%;
-      padding-top: 5.75rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .academic-work-gallery__viewport,
-    .academic-work-gallery__grid,
-    .academic-work-detail {
+    .academic-work-gallery__grid {
       transition: none;
     }
 
@@ -553,7 +421,6 @@
     if (!gallery || gallery.dataset.initialized === 'true') return;
     gallery.dataset.initialized = 'true';
 
-    const stage = gallery.querySelector('.academic-work-gallery__stage');
     const backgroundVideo = gallery.parentElement?.querySelector('.academic-gallery-background__video');
     const viewport = gallery.querySelector('.academic-work-gallery__viewport');
     const grid = gallery.querySelector('.academic-work-gallery__grid');
@@ -562,13 +429,7 @@
     const nextButton = gallery.querySelector('.academic-work-gallery__arrow--next');
     const currentPageLabel = gallery.querySelector('.academic-work-gallery__current-page');
     const pageCountLabel = gallery.querySelector('.academic-work-gallery__page-count');
-    const detail = gallery.querySelector('.academic-work-detail');
-    const detailTitle = gallery.querySelector('.academic-work-detail__title');
-    const detailBody = gallery.querySelector('.academic-work-detail__body');
-    const backButton = gallery.querySelector('.academic-work-detail__back');
-    const moreButtons = [...gallery.querySelectorAll('.academic-work-card__more')];
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let activeButton = null;
     let carouselPage = 0;
     let resizeFrame = null;
     let touchStartX = null;
@@ -614,31 +475,6 @@
       updateCarousel();
     };
 
-    const openCard = (button) => {
-      const card = button.closest('.academic-work-card');
-      if (!card) return;
-      const detailSource = card.querySelector('.academic-work-card__detail-source');
-      activeButton = button;
-      detailTitle.innerHTML = card.querySelector('.academic-work-card__detail-title-source')?.innerHTML || '名称';
-      detailBody.innerHTML = detailSource?.innerHTML || '';
-      detailBody.classList.toggle('is-indented', detailSource?.dataset.indent === 'true');
-      moreButtons.forEach((item) => item.setAttribute('aria-expanded', String(item === button)));
-      detail.setAttribute('aria-hidden', 'false');
-      stage.classList.add('is-open');
-      window.setTimeout(() => viewport.setAttribute('aria-hidden', 'true'), 320);
-      window.setTimeout(() => backButton.focus(), 420);
-    };
-
-    const closeCard = () => {
-      viewport.setAttribute('aria-hidden', 'false');
-      stage.classList.remove('is-open');
-      detail.setAttribute('aria-hidden', 'true');
-      moreButtons.forEach((item) => item.setAttribute('aria-expanded', 'false'));
-      window.setTimeout(() => activeButton?.focus(), 320);
-    };
-
-    moreButtons.forEach((button) => button.addEventListener('click', () => openCard(button)));
-    backButton.addEventListener('click', closeCard);
     previousButton.addEventListener('click', () => moveCarousel(-1));
     nextButton.addEventListener('click', () => moveCarousel(1));
 
@@ -663,8 +499,6 @@
     }, { passive: true });
 
     gallery.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && stage.classList.contains('is-open')) closeCard();
-      if (stage.classList.contains('is-open')) return;
       if (event.key === 'ArrowLeft') moveCarousel(-1);
       if (event.key === 'ArrowRight') moveCarousel(1);
     });

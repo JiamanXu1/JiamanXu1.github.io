@@ -1,0 +1,185 @@
+{{ define "main" }}
+{{ $workIndex := .Params.work_index | int }}
+{{ $gallery := dict }}
+{{ range site.Home.Params.sections }}
+  {{ if eq .block "academic-gallery" }}{{ $gallery = . }}{{ end }}
+{{ end }}
+{{ $items := $gallery.content.items }}
+{{ $item := index $items $workIndex }}
+{{ $workTitle := $item.detail_title | default $item.title | default "名称" }}
+
+<main class="academic-work-page">
+  <article class="academic-work-page__article{{ if $item.detail_indent }} is-indented{{ end }}">
+    <a class="academic-work-page__back" href="{{ site.Home.RelPermalink }}#section-markdown" aria-label="返回学术作品列表">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h11"/></svg>
+      <span>返回作品列表</span>
+    </a>
+
+    <header class="academic-work-page__header">
+      <p class="academic-work-page__year">{{ $item.year | default "xxxx年" }}</p>
+      <h1>{{ $workTitle | markdownify }}</h1>
+    </header>
+
+    {{ with $item.image }}
+      <figure class="academic-work-page__figure">
+        <img
+          src="{{ . | relURL }}"
+          alt="{{ $item.image_alt | default $workTitle | plainify }}"
+          style="object-fit: {{ $item.image_fit | default "cover" }}; object-position: {{ $item.image_position | default "center" }};"
+        >
+      </figure>
+    {{ end }}
+
+    <div class="academic-work-page__body">
+      {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
+    </div>
+  </article>
+</main>
+
+<style>
+  .academic-work-page {
+    min-height: 100vh;
+    padding: clamp(5.5rem, 10vh, 8rem) clamp(1.25rem, 6vw, 5rem) clamp(4rem, 10vh, 8rem);
+    color: #242421;
+    background:
+      radial-gradient(circle at 12% 5%, rgba(140, 188, 181, .12), transparent 32rem),
+      #f8f8f5;
+  }
+
+  .academic-work-page__article {
+    width: min(100%, 1040px);
+    margin: 0 auto;
+  }
+
+  .academic-work-page__back {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    margin-bottom: clamp(3rem, 8vh, 6rem);
+    color: #343430;
+    font-size: .9rem;
+    letter-spacing: .06em;
+    text-decoration: none;
+    transition: color 180ms ease, transform 180ms ease;
+  }
+
+  .academic-work-page__back:hover {
+    color: #0f766e;
+    transform: translateX(-3px);
+  }
+
+  .academic-work-page__back svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .academic-work-page__header {
+    max-width: 920px;
+    margin-bottom: clamp(2.5rem, 7vh, 5rem);
+  }
+
+  .academic-work-page__year {
+    margin: 0 0 1rem;
+    color: #6b6b64;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(.82rem, 1.1vw, 1rem);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .academic-work-page__header h1 {
+    margin: 0;
+    color: #171713;
+    font-family: "Times New Roman", "Songti SC", "STSong", Georgia, serif;
+    font-size: clamp(2.3rem, 5.2vw, 5.6rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.025em;
+  }
+
+  .academic-work-page__header h1 p {
+    display: inline;
+    margin: 0;
+  }
+
+  .academic-work-page__figure {
+    width: 100%;
+    height: clamp(280px, 52vw, 560px);
+    margin: 0 0 clamp(3rem, 8vh, 6rem);
+    overflow: hidden;
+    background: #ecece8;
+  }
+
+  .academic-work-page__figure img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .academic-work-page__body {
+    max-width: 840px;
+    color: #30302c;
+    font-family: "Songti SC", "STSong", Georgia, serif;
+    font-size: clamp(1.05rem, 1.35vw, 1.28rem);
+    line-height: 1.95;
+  }
+
+  .academic-work-page__body p {
+    margin: 0 0 1.45em;
+  }
+
+  .academic-work-page__article.is-indented .academic-work-page__body p {
+    text-indent: 2em;
+  }
+
+  .academic-work-page__body h2 {
+    margin: 2.2em 0 .9em;
+    color: #171713;
+    font-family: "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", serif;
+    font-size: clamp(1.35rem, 2.25vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.45;
+    text-indent: 0;
+  }
+
+  .dark .academic-work-page {
+    color: #e5e7eb;
+    background:
+      radial-gradient(circle at 12% 5%, rgba(45, 146, 134, .15), transparent 32rem),
+      #10151d;
+  }
+
+  .dark .academic-work-page__back,
+  .dark .academic-work-page__body {
+    color: #d1d5db;
+  }
+
+  .dark .academic-work-page__header h1,
+  .dark .academic-work-page__body h2 {
+    color: #f8fafc;
+  }
+
+  .dark .academic-work-page__year {
+    color: #9ca3af;
+  }
+
+  @media (max-width: 640px) {
+    .academic-work-page {
+      padding-top: 5rem;
+    }
+
+    .academic-work-page__back {
+      margin-bottom: 3rem;
+    }
+
+    .academic-work-page__figure {
+      height: min(68vw, 380px);
+    }
+  }
+</style>
+{{ end }}

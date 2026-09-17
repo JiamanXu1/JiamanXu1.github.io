@@ -210,22 +210,24 @@ background_opacity: 0.20
   title: 学术作品名称
   summary: 卡片上显示的简短摘要
   detail: |-
-    点击 more 后显示的完整介绍，可以写成多段文字。
+    点击 more 进入独立详情页后显示的完整介绍，可以写成多段文字。
   image: media/academic-work-1.jpg
 ```
 
 - `year`：卡片第一行年份。
-- `title`：卡片和展开大卡片中的大标题。
-- `detail_title`：点击 `more` 后显示的标题；省略时自动使用 `title`。
+- `title`：首页小卡片中的标题。
+- `detail_title`：点击 `more` 进入独立详情页后显示的大标题；省略时自动使用 `title`。
 - `summary`：小卡片上的学术作品摘要。
-- `detail`：点击 `more` 后大卡片中的详细内容，支持 Markdown 段落。
-- `detail_indent`：设为 `true` 时，展开页的每个段落首行缩进两个字符。
+- `detail`：独立详情页中的正文，支持 Markdown 段落和小标题。
+- `detail_indent`：设为 `true` 时，详情页的每个正文段落首行缩进两个字符，标题不缩进。
 - `image`：图片路径。留空时显示“图片插入区域”占位框。
 - `image_alt`：图片的替代文字，用于无障碍阅读。
 - `image_fit`：普通照片使用 `cover`；需要完整显示的图表或竖版图片使用 `contain`。
 - `image_position`：图片裁切焦点，通常使用 `center`、`left` 或 `right`。
 
 第五至第八项已保留为空白占位卡片，直接替换对应项中的 `year`、`title`、`summary`、`detail` 和 `image` 即可，不需要修改轮播脚本。
+
+八张卡片的 `more` 已分别对应 `/academic-work/1/` 至 `/academic-work/8/` 独立页面。这些页面会自动读取上述卡片数据，无需在详情页重复填写内容。
 
 建议将卡片图片上传到 `static/media/`，例如 `static/media/academic-work-5.jpg`，然后将 `image` 填写为 `media/academic-work-5.jpg`。八张图使用相近的长宽比会让页面更整齐。
 
