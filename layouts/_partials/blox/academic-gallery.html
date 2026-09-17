@@ -1,4 +1,5 @@
 {{/* Four-card academic works gallery with an in-place expanding detail panel. */}}
+{{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 {{ $items := $block.content.items }}
 
@@ -13,7 +14,11 @@
         <article class="academic-work-card">
           <div class="academic-work-card__media">
             {{ with $item.image }}
-              <img src="{{ . | relURL }}" alt="{{ $item.image_alt | default $item.title }}">
+              <img
+                src="{{ . | relURL }}"
+                alt="{{ $item.image_alt | default $item.title }}"
+                style="object-position: {{ $item.image_position | default "center" }};"
+              >
             {{ else }}
               <div class="academic-work-card__placeholder" aria-label="图片插入区域">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -26,8 +31,8 @@
 
           <div class="academic-work-card__body">
             <p class="academic-work-card__year">{{ $item.year | default "xxxx年" }}</p>
-            <h3>{{ $item.title | default "名称" }}</h3>
-            <p class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" }}</p>
+            <h3>{{ $item.title | default "名称" | $page.RenderString }}</h3>
+            <div class="academic-work-card__summary">{{ $item.summary | default "学术作品摘要呈现" | $page.RenderString }}</div>
             <button
               class="academic-work-card__more"
               type="button"
@@ -36,6 +41,9 @@
               data-card-index="{{ $index }}">
               more
             </button>
+            <div class="academic-work-card__detail-title-source" hidden>
+              {{ $item.detail_title | default $item.title | default "名称" | $page.RenderString }}
+            </div>
             <div class="academic-work-card__detail-source" hidden>
               {{ $item.detail | default "学术作品详细内容呈现" | markdownify }}
             </div>
@@ -198,6 +206,10 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .academic-work-card__summary p {
+    margin: 0;
   }
 
   .academic-work-card__more {
@@ -382,7 +394,7 @@
       const card = button.closest('.academic-work-card');
       if (!card) return;
       activeButton = button;
-      detailTitle.textContent = card.querySelector('h3')?.textContent?.trim() || '名称';
+      detailTitle.innerHTML = card.querySelector('.academic-work-card__detail-title-source')?.innerHTML || '名称';
       detailBody.innerHTML = card.querySelector('.academic-work-card__detail-source')?.innerHTML || '';
       moreButtons.forEach((item) => item.setAttribute('aria-expanded', String(item === button)));
       detail.setAttribute('aria-hidden', 'false');

@@ -207,9 +207,12 @@ content/_index.md
 
 - `year`：卡片第一行年份。
 - `title`：卡片和展开大卡片中的大标题。
+- `detail_title`：点击 `more` 后显示的标题；省略时自动使用 `title`。
 - `summary`：小卡片上的学术作品摘要。
 - `detail`：点击 `more` 后大卡片中的详细内容，支持 Markdown 段落。
 - `image`：图片路径。留空时显示“图片插入区域”占位框。
+- `image_alt`：图片的替代文字，用于无障碍阅读。
+- `image_position`：图片裁切焦点，通常使用 `center`、`left` 或 `right`。
 
 建议将四张图片上传到 `static/media/`，例如 `static/media/academic-work-1.jpg`，然后将 `image` 填写为 `media/academic-work-1.jpg`。四张图使用相近的长宽比会让页面更整齐。
 
