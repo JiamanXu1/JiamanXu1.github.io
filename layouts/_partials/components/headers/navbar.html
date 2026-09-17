@@ -55,7 +55,12 @@
   }
 
   {{ if .IsHome }}
-  .page-header.academic-home-header {
+  .page-wrapper {
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  .page-header {
     position: fixed;
     inset: 0 0 auto;
     z-index: 1000;
@@ -68,7 +73,7 @@
     will-change: transform;
   }
 
-  .page-header.academic-home-header.is-nav-hidden {
+  .page-header.is-nav-hidden {
     transform: translateY(calc(-100% - 0.5rem));
     opacity: 0;
     pointer-events: none;
@@ -83,6 +88,8 @@
   }
 
   .page-body {
+    display: block !important;
+    margin: 0 !important;
     padding-top: 0 !important;
   }
 
@@ -139,7 +146,7 @@
       scroll-behavior: auto;
     }
 
-    .page-header.academic-home-header {
+    .page-header {
       transition: none;
     }
   }
