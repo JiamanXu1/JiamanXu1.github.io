@@ -196,6 +196,16 @@ content/_index.md
 
 找到 `block: academic-gallery`。每张卡片包含以下字段：
 
+该区域的底层循环背景视频也位于同一区块：
+
+```yaml
+background_video: media/gentle-teal-water-loop-10s.mp4
+background_opacity: 0.20
+```
+
+- `background_video`：视频文件路径，建议使用无声的 H.264 MP4。
+- `background_opacity`：背景可见度，`0.20` 即 20%。视频位于卡片下方，不会改变卡片透明度。
+
 ```yaml
 - year: 2026年
   title: 学术作品名称

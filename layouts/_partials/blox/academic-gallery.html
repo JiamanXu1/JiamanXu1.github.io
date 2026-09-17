@@ -2,6 +2,14 @@
 {{ $page := .wcPage }}
 {{ $block := .wcBlock }}
 {{ $items := $block.content.items }}
+{{ $backgroundVideo := $block.content.background_video | default "media/gentle-teal-water-loop-10s.mp4" }}
+{{ $backgroundOpacity := $block.content.background_opacity | default 0.20 }}
+
+<div class="academic-gallery-background" style="--academic-gallery-video-opacity: {{ $backgroundOpacity }};" aria-hidden="true">
+  <video class="academic-gallery-background__video" autoplay muted loop playsinline preload="auto" tabindex="-1">
+    <source src="{{ $backgroundVideo | relURL }}" type="video/mp4">
+  </video>
+</div>
 
 <div id="academic-work-gallery" class="academic-work-gallery">
   <header class="academic-work-gallery__header">
@@ -68,11 +76,31 @@
 
 <style>
   .blox-academic-gallery {
+    position: relative;
     padding: clamp(4.5rem, 8vh, 6rem) 0 clamp(1.25rem, 3vh, 2rem) !important;
     background: #f7f7f4 !important;
   }
 
+  .academic-gallery-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .academic-gallery-background__video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    opacity: var(--academic-gallery-video-opacity, .2);
+  }
+
   .academic-work-gallery {
+    position: relative;
+    z-index: 2;
     width: min(92vw, 1680px);
     margin: 0 auto;
     color: #111;
@@ -382,13 +410,21 @@
     gallery.dataset.initialized = 'true';
 
     const stage = gallery.querySelector('.academic-work-gallery__stage');
+    const backgroundVideo = gallery.parentElement?.querySelector('.academic-gallery-background__video');
     const grid = gallery.querySelector('.academic-work-gallery__grid');
     const detail = gallery.querySelector('.academic-work-detail');
     const detailTitle = gallery.querySelector('.academic-work-detail__title');
     const detailBody = gallery.querySelector('.academic-work-detail__body');
     const backButton = gallery.querySelector('.academic-work-detail__back');
     const moreButtons = [...gallery.querySelectorAll('.academic-work-card__more')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let activeButton = null;
+
+    if (reducedMotion) {
+      backgroundVideo?.pause();
+    } else {
+      backgroundVideo?.play().catch(() => {});
+    }
 
     const openCard = (button) => {
       const card = button.closest('.academic-work-card');

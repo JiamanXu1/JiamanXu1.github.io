@@ -31,6 +31,8 @@ sections:
   - block: academic-gallery
     content:
       title: 欢迎访问我的学术主页
+      background_video: media/gentle-teal-water-loop-10s.mp4
+      background_opacity: 0.20
       items:
         - year: 2024年
           title: >-
