@@ -13,7 +13,8 @@ sections:
       scroll_hint: 向下滚动进入主页
       button:
         text: 查看简历
-        url: cv/
+        url: uploads/xu-jiaman-cv.pdf
+        new_tab: true
     design:
       css_class: dark academic-video-section
       overlay_opacity: 0.80

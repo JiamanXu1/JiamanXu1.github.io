@@ -73,7 +73,11 @@
     <div class="academic-video-hero__bio">
       <div class="academic-video-hero__bio-text">{{ .Content }}</div>
       {{ with $block.content.button }}
-        <a class="academic-video-hero__button" href="{{ .url | relLangURL }}">{{ .text }}</a>
+        <a
+          class="academic-video-hero__button"
+          href="{{ .url | relLangURL }}"
+          {{ if .new_tab }}target="_blank" rel="noopener"{{ end }}
+        >{{ .text }}</a>
       {{ end }}
       {{ with .Params.interests }}
         <div class="academic-video-hero__interests">

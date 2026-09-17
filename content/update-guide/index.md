@@ -21,7 +21,7 @@ toc: true
 | 教学经历 | `content/teaching/` |
 | 项目 | `content/projects/` |
 | 网页版简历 | `content/cv/index.md` |
-| PDF 简历 | `static/uploads/resume.pdf` |
+| PDF 简历 | `static/uploads/xu-jiaman-cv.pdf` |
 | 顶部中文导航 | `config/_default/menus.yaml` |
 | 网站名称、描述和配色 | `config/_default/hugo.yaml`、`config/_default/params.yaml` |
 
@@ -180,11 +180,11 @@ external_link: ""
 
 如需提供 PDF：
 
-1. 将 PDF 命名为 `resume.pdf`。
-2. 上传至 `static/uploads/resume.pdf`。
-3. 在简历页或个人资料中加入链接 `/uploads/resume.pdf`。
+1. 将 PDF 命名为 `xu-jiaman-cv.pdf`。
+2. 上传并替换 `static/uploads/xu-jiaman-cv.pdf`。
+3. 首页“查看简历”按钮已链接到 `/uploads/xu-jiaman-cv.pdf`，并会在新标签页直接打开浏览器 PDF 阅读器。
 
-更新 PDF 时保持文件名不变，原链接会继续有效。
+更新 PDF 时保持文件名不变，原链接会继续有效。请不要给按钮添加 `download` 属性，否则浏览器会倾向于下载文件而不是打开阅读页面。
 
 ## 更换学术页背景
 
