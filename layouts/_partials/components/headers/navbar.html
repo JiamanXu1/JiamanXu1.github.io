@@ -18,7 +18,50 @@
     color: #374151 !important;
     transform: translateY(-1px);
   }
+
+  {{ if .IsHome }}
+  .page-header.academic-home-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1000;
+    width: 100%;
+    transform: translateY(0);
+    opacity: 1;
+    transition:
+      transform 360ms cubic-bezier(.22, 1, .36, 1),
+      opacity 240ms ease;
+    will-change: transform;
+  }
+
+  .page-header.academic-home-header.is-nav-hidden {
+    transform: translateY(calc(-100% - 0.5rem));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .academic-home-nav-zone {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1001;
+    height: 18px;
+    background: transparent;
+  }
+
+  .page-body {
+    padding-top: 0 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-header.academic-home-header {
+      transition: none;
+    }
+  }
+  {{ end }}
 </style>
+
+{{ if .IsHome }}
+  <div class="academic-home-nav-zone" aria-hidden="true"></div>
+{{ end }}
 
 <header id="site-header" class="header">
   <nav class="navbar px-3 flex justify-start">
@@ -205,4 +248,81 @@
 
 {{ if $show_search }}
   {{- partial "components/search-modal.html" . -}}
+{{ end }}
+
+{{ if .IsHome }}
+<script>
+  (() => {
+    const header = document.getElementById('site-header')?.closest('.page-header');
+    const revealZone = document.querySelector('.academic-home-nav-zone');
+    const menuToggle = document.getElementById('nav-toggle');
+    if (!header || header.dataset.smartNavInitialized === 'true') return;
+
+    header.dataset.smartNavInitialized = 'true';
+    header.classList.add('academic-home-header');
+
+    let hasNavigated = false;
+    let lastScrollY = window.scrollY;
+    let hideTimer = null;
+
+    const cancelHide = () => {
+      if (hideTimer !== null) {
+        window.clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+    };
+
+    const showNav = () => {
+      cancelHide();
+      header.classList.remove('is-nav-hidden');
+    };
+
+    const hideNav = () => {
+      if (menuToggle?.checked || header.matches(':focus-within')) return;
+      cancelHide();
+      header.classList.add('is-nav-hidden');
+    };
+
+    const scheduleHide = () => {
+      if (!hasNavigated || menuToggle?.checked) return;
+      cancelHide();
+      hideTimer = window.setTimeout(hideNav, 420);
+    };
+
+    window.addEventListener('wheel', (event) => {
+      if (event.deltaY > 3) {
+        hasNavigated = true;
+        hideNav();
+      } else if (event.deltaY < -3) {
+        showNav();
+      }
+    }, { passive: true, capture: true });
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY + 5) {
+        hasNavigated = true;
+        hideNav();
+      } else if (currentScrollY < lastScrollY - 5) {
+        showNav();
+      }
+      lastScrollY = Math.max(currentScrollY, 0);
+    }, { passive: true });
+
+    document.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch') return;
+      if (event.clientY <= 18) showNav();
+    }, { passive: true });
+
+    revealZone?.addEventListener('pointerenter', showNav);
+    header.addEventListener('pointerenter', showNav);
+    header.addEventListener('pointerleave', scheduleHide);
+    header.addEventListener('focusin', showNav);
+    header.addEventListener('focusout', scheduleHide);
+    menuToggle?.addEventListener('change', () => {
+      if (menuToggle.checked) showNav();
+      else scheduleHide();
+    });
+  })();
+</script>
 {{ end }}
