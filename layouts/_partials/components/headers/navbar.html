@@ -79,14 +79,6 @@
     pointer-events: none;
   }
 
-  .academic-home-nav-zone {
-    position: fixed;
-    inset: 0 0 auto;
-    z-index: 1001;
-    height: 18px;
-    background: transparent;
-  }
-
   .page-body {
     display: block !important;
     margin: 0 !important;
@@ -152,10 +144,6 @@
   }
   {{ end }}
 </style>
-
-{{ if .IsHome }}
-  <div class="academic-home-nav-zone" aria-hidden="true"></div>
-{{ end }}
 
 <header id="site-header" class="header">
   <nav class="navbar px-3 flex justify-start">
@@ -349,7 +337,6 @@
 <script>
   (() => {
     const header = document.getElementById('site-header')?.closest('.page-header');
-    const revealZone = document.querySelector('.academic-home-nav-zone');
     const menuToggle = document.getElementById('nav-toggle');
     if (!header || header.dataset.smartNavInitialized === 'true') return;
 
@@ -444,7 +431,6 @@
       if (event.clientY <= 18) showNav();
     }, { passive: true });
 
-    revealZone?.addEventListener('pointerenter', showNav);
     header.addEventListener('pointerenter', showNav);
     header.addEventListener('pointerleave', scheduleHide);
     header.addEventListener('focusin', showNav);
