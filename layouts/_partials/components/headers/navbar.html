@@ -89,7 +89,8 @@
   body {
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory !important;
-    scroll-padding-top: 0;
+    scroll-padding: 0 !important;
+    scroll-padding-block-start: 0 !important;
     overscroll-behavior-y: none;
   }
 
@@ -104,6 +105,8 @@
     min-height: 100dvh;
     overflow: hidden;
     overflow: clip;
+    scroll-margin: 0 !important;
+    scroll-margin-block-start: 0 !important;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
