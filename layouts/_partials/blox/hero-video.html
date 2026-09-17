@@ -4,9 +4,6 @@
 {{ $username := $block.content.username | default "admin" }}
 {{ $author := site.GetPage (printf "/authors/%s" $username) }}
 {{ $video := $block.content.video | default "media/home-intro.mp4" }}
-{{ $poster := $block.content.poster | default "media/home-background.jpg" }}
-{{ $posterURL := $poster | relURL }}
-{{ with resources.Get $poster }}{{ $posterURL = .RelPermalink }}{{ end }}
 {{ $overlayOpacity := $block.design.overlay_opacity | default 0.82 }}
 {{ $overlayDuration := $block.design.overlay_duration | default 1200 }}
 
@@ -23,7 +20,6 @@
     loop
     playsinline
     preload="auto"
-    poster="{{ $posterURL }}"
     aria-hidden="true"
   >
     <source src="{{ $video | relURL }}" type="video/mp4">

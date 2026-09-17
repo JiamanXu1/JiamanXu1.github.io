@@ -14,7 +14,6 @@ toc: true
 | 头像 | `content/authors/admin/avatar.png` |
 | 首页结构、各板块标题、视频与遮罩参数 | `content/_index.md` |
 | 首页循环背景视频 | `static/media/home-intro.mp4` |
-| 视频加载失败时的备用图片 | `assets/media/home-background.jpg` |
 | 教育、工作、技能、语言、奖项数据 | `content/authors/admin/_index.md` |
 | 研究成果 | `content/publications/` |
 | 学术报告 | `content/event/` |
@@ -259,11 +258,7 @@ static/media/home-intro.mp4
 - 为避免移动端加载过慢，建议文件不超过约 8 MB。
 - 视频不会播放声音；首页已设置 `muted`、`loop` 和 `playsinline`。
 
-如果浏览器禁止自动播放或视频尚未加载，网站会使用以下图片作为备用画面：
-
-```text
-assets/media/home-background.jpg
-```
+首页视频不再配置底层海报图。视频尚未加载时会显示纯深色背景，避免旧图片在视频下方露出。
 
 ### 修改遮罩和动画速度
 
@@ -272,7 +267,6 @@ assets/media/home-background.jpg
 ```yaml
 content:
   video: media/home-intro.mp4
-  poster: media/home-background.jpg
 design:
   overlay_opacity: 0.80
   overlay_duration: 1200

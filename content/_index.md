@@ -9,7 +9,6 @@ sections:
     content:
       username: admin
       video: media/home-intro.mp4
-      poster: media/home-background.jpg
       scroll_hint: 向下滚动进入主页
       button:
         text: 查看简历
