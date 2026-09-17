@@ -84,6 +84,25 @@
   {{ end }}
 {{ end }}
 
+{{ $isResearchReveal := eq ($block.id | default "") "publications" }}
+{{ $researchBackground := "media/game-disc-wall-white-text-muted-4k.png" }}
+{{ $researchBackgroundURL := $researchBackground | relURL }}
+{{ with resources.Get $researchBackground }}
+  {{ $researchBackgroundURL = .RelPermalink }}
+{{ end }}
+
+{{ if $isResearchReveal }}
+<div
+  id="research-reveal"
+  class="research-reveal"
+  data-reveal-duration="1200"
+  style="--research-background: url('{{ $researchBackgroundURL }}'); --research-reveal-duration: 1200ms;"
+>
+  <div class="research-reveal__background" aria-hidden="true"></div>
+  <div class="research-reveal__veil" aria-hidden="true"></div>
+  <div class="research-reveal__content" aria-hidden="true">
+{{ end }}
+
 {{ if $block.content.title }}
 <div class="flex flex-col items-center max-w-prose mx-auto gap-3 justify-center px-6 md:px-0">
   <div class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
@@ -152,4 +171,197 @@
         </a>
       </div>
   </div>
+{{ end }}
+
+{{ if $isResearchReveal }}
+  </div>
+</div>
+
+<style>
+  #publications.research-reveal-section {
+    padding: 0 !important;
+    background: #d7d1c7 !important;
+  }
+
+  .research-reveal {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    color: #161616;
+  }
+
+  .research-reveal__background,
+  .research-reveal__veil {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .research-reveal__background {
+    z-index: 0;
+    background-image: var(--research-background);
+    background-position: center;
+    background-size: cover;
+    transform: scale(1.015);
+  }
+
+  .research-reveal__veil {
+    z-index: 1;
+    background: rgba(248, 248, 244, .86);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--research-reveal-duration) cubic-bezier(.76, 0, .24, 1);
+    will-change: transform;
+  }
+
+  .research-reveal.is-wiping .research-reveal__veil,
+  .research-reveal.is-revealed .research-reveal__veil {
+    transform: scaleX(1);
+  }
+
+  .research-reveal__content {
+    position: relative;
+    z-index: 2;
+    width: min(90vw, 1050px);
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(.22, 1, .36, 1),
+      visibility 0s linear 700ms;
+  }
+
+  .research-reveal.is-revealed .research-reveal__content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 90ms;
+  }
+
+  .research-reveal__content > div {
+    width: 100%;
+  }
+
+  .research-reveal__content .text-gray-900,
+  .dark .research-reveal__content .dark\:text-white,
+  .research-reveal__content p {
+    color: #161616 !important;
+  }
+
+  @media (max-width: 640px) {
+    .research-reveal__background {
+      background-position: center;
+    }
+
+    .research-reveal__content {
+      width: 92vw;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .research-reveal__veil {
+      transition: none;
+    }
+
+    .research-reveal__content {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const section = document.getElementById('publications');
+    const scene = document.getElementById('research-reveal');
+    if (!section || !scene || scene.dataset.initialized === 'true') return;
+    scene.dataset.initialized = 'true';
+
+    const content = scene.querySelector('.research-reveal__content');
+    const duration = Number(scene.dataset.revealDuration) || 1200;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let readyForReveal = false;
+    let revealStarted = false;
+    let readyTimer = null;
+    let touchStartY = null;
+
+    const sectionIsCurrent = () => {
+      const rect = section.getBoundingClientRect();
+      return Math.abs(rect.top) <= window.innerHeight * .2 && rect.bottom >= window.innerHeight * .8;
+    };
+
+    const armRevealAfterPause = () => {
+      if (revealStarted) return;
+      readyForReveal = false;
+      scene.classList.remove('is-ready');
+      window.clearTimeout(readyTimer);
+      readyTimer = window.setTimeout(() => {
+        readyForReveal = true;
+        scene.classList.add('is-ready');
+      }, reducedMotion ? 0 : 420);
+    };
+
+    const reveal = () => {
+      if (revealStarted) return;
+      revealStarted = true;
+      scene.classList.add('is-wiping');
+      window.setTimeout(() => {
+        scene.classList.add('is-revealed');
+        content?.setAttribute('aria-hidden', 'false');
+      }, reducedMotion ? 0 : duration);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      window.clearTimeout(readyTimer);
+      if (entry?.isIntersecting && entry.intersectionRatio >= .72) {
+        armRevealAfterPause();
+      } else if (!revealStarted) {
+        readyForReveal = false;
+        scene.classList.remove('is-ready');
+      }
+    }, { threshold: [.72] });
+
+    observer.observe(section);
+
+    window.addEventListener('wheel', (event) => {
+      if (revealStarted || event.deltaY <= 4 || !sectionIsCurrent()) return;
+      event.preventDefault();
+      if (readyForReveal) {
+        reveal();
+      } else {
+        armRevealAfterPause();
+      }
+    }, { passive: false, capture: true });
+
+    window.addEventListener('keydown', (event) => {
+      if (revealStarted || !['ArrowDown', 'PageDown', ' ', 'Spacebar'].includes(event.key) || !sectionIsCurrent()) return;
+      event.preventDefault();
+      if (readyForReveal) reveal();
+    }, { capture: true });
+
+    window.addEventListener('touchstart', (event) => {
+      touchStartY = event.touches[0]?.clientY ?? null;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (event) => {
+      const currentY = event.touches[0]?.clientY;
+      if (revealStarted || touchStartY === null || currentY === undefined || touchStartY - currentY <= 18 || !sectionIsCurrent()) return;
+      event.preventDefault();
+      if (readyForReveal) reveal();
+    }, { passive: false, capture: true });
+
+    window.addEventListener('touchend', () => {
+      if (!revealStarted && sectionIsCurrent()) armRevealAfterPause();
+      touchStartY = null;
+    }, { passive: true });
+  })();
+</script>
 {{ end }}

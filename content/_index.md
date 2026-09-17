@@ -68,4 +68,5 @@ sections:
           - publications
     design:
       view: citation
+      css_class: research-reveal-section
 ---
