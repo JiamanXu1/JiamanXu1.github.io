@@ -26,6 +26,34 @@
     color: #e5e7eb !important;
   }
 
+  @media (min-width: 1024px) {
+    #site-header .navbar {
+      display: grid;
+      grid-template-columns: minmax(9rem, 1fr) auto minmax(9rem, 1fr);
+      align-items: center;
+      column-gap: clamp(1rem, 3vw, 3rem);
+    }
+
+    #site-header .navbar-desktop-home {
+      grid-column: 1;
+      justify-self: start;
+      padding-left: clamp(0.35rem, 1.5vw, 1.5rem);
+    }
+
+    #site-header #nav-menu {
+      grid-column: 2;
+      justify-self: center;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    #site-header .navbar-actions {
+      grid-column: 3;
+      justify-self: end;
+      padding-right: clamp(0.35rem, 1.5vw, 1.5rem);
+    }
+  }
+
   {{ if .IsHome }}
   .page-header.academic-home-header {
     position: fixed;
@@ -130,6 +158,12 @@
       </a>
     </div>
 
+    <div class="navbar-desktop-home hidden lg:flex items-center">
+      <a class="navbar-home-script" href="{{ site.Home.RelPermalink }}" title="返回首页" aria-label="返回首页">
+        Homepage
+      </a>
+    </div>
+
     <input id="nav-toggle" type="checkbox" class="hidden" />
     <label
       for="nav-toggle"
@@ -150,11 +184,6 @@
       id="nav-menu"
       class="navbar-nav order-3 hidden lg:flex w-full pb-6 lg:order-1 lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8 justify-start
       lg:justify-center mx-auto">
-      <li class="nav-item hidden lg:block">
-        <a class="nav-link navbar-home-script flex items-center" href="{{ site.Home.RelPermalink }}" title="返回首页" aria-label="返回首页">
-          Homepage
-        </a>
-      </li>
       {{ $currentPage := . }}
       {{ range site.Menus.main }}
         {{ if .Params.hidden }}{{ continue }}{{ end }}
@@ -230,7 +259,7 @@
       {{ end }}
     </ul>
 
-    <div class="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+    <div class="navbar-actions order-1 ml-auto flex items-center md:order-2 lg:ml-0">
       {{ $show_search := site.Params.header.navbar.show_search | default false }}
       {{ with $show_search }}
         <button
