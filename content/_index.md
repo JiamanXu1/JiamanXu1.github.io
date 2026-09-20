@@ -154,11 +154,14 @@ sections:
     id: publications
     content:
       title: 研究成果
-      text: 论文、预印本和其他研究成果将在这里展示。
+      text: |-
+        这里是研究成果页面的文字修改区域。请在此填写研究主题、代表性成果或阶段性研究说明。
       filters:
         folders:
           - publications
     design:
       view: citation
       css_class: research-reveal-section
+      overlay_opacity: 0.80
+      overlay_duration: 1200
 ---

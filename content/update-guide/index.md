@@ -245,6 +245,22 @@ assets/media/game-disc-wall-white-text-muted-4k.png
 
 保持文件名不变并替换该图片，即可直接更新背景。建议使用 16:9 横向图片；当前交互会先完整展示背景，下一次向下滚动时再播放从右向左的浅白遮罩，并在动画完成后显示研究成果文字。
 
+第三屏中央的标题、文字和遮罩参数都在 `content/_index.md` 的 `id: publications` 区块中：
+
+```yaml
+content:
+  title: 研究成果
+  text: |-
+    请在这里填写需要居中展示的文字。
+design:
+  overlay_opacity: 0.80
+  overlay_duration: 1200
+```
+
+- `text` 支持多行文字，会在白色遮罩上居中显示。
+- `overlay_opacity: 0.80` 表示白色遮罩约 80% 不透明，仍保留约 20% 背景可见度。
+- `overlay_duration: 1200` 表示从右向左展开用时 1.2 秒。
+
 ### 更换首页循环视频
 
 首页目前使用 1920×1080 的 MP4 循环视频。最简单的更换方法是直接替换：
